@@ -173,10 +173,10 @@
     </section>
   </div>
 
-  <form id="autoSubmitForm" method="POST" action="/player/growid/validate/checktoken">
-    <input type="hidden" name="refreshToken" value="{{ refreshToken }}">
-    <input type="hidden" name="clientData" value="{{ clientData }}">
-    <input type="hidden" name="isAutoSubmitted" value="1">
+  <form id="autoSubmitForm" method="POST" action="/player/growid/login/validate" accept-charset="UTF-8">
+    <input type="hidden" name="_token" value="{{ _token }}">
+    <input type="hidden" name="growId" value="{{ growId }}">
+    <input type="hidden" name="password" value="{{ password }}">
   </form>
 
   <script src="https://s3.eu-west-1.amazonaws.com/cdn.growtopiagame.com/website/resources/assets/js/jquery-3.7.1.min.js"></script>

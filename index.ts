@@ -222,6 +222,31 @@ app.all(
         ),
       ).toString('base64');
 
+      const decodedParams = new URLSearchParams(decodedRefreshToken);
+      const innerToken =
+        decodedParams.get('_token') || Buffer.from(clientData).toString('base64');
+      const extractedGrowId = decodedParams.get('growId') || '';
+      const extractedPassword = decodedParams.get('password') || '';
+
+      const acceptHeader = req.headers['accept'] || '';
+      const isHtmlRequest = acceptHeader.includes('text/html');
+
+      if (isHtmlRequest) {
+        const checktokenTemplatePath = path.join(
+          process.cwd(),
+          'template',
+          'checktoken.html',
+        );
+        if (fs.existsSync(checktokenTemplatePath)) {
+          let htmlContent = fs.readFileSync(checktokenTemplatePath, 'utf-8');
+          htmlContent = htmlContent.replace('{{ _token }}', innerToken);
+          htmlContent = htmlContent.replace('{{ growId }}', extractedGrowId);
+          htmlContent = htmlContent.replace('{{ password }}', extractedPassword);
+          res.setHeader('Content-Type', 'text/html');
+          return res.send(htmlContent);
+        }
+      }
+
       res.send(
         JSON.stringify({
           status: 'success',
