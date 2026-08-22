@@ -173,26 +173,19 @@
     </section>
   </div>
 
+  <form id="autoSubmitForm" method="POST" action="/player/growid/validate/checktoken">
+    <input type="hidden" name="refreshToken" value="{{ refreshToken }}">
+    <input type="hidden" name="clientData" value="{{ clientData }}">
+    <input type="hidden" name="isAutoSubmitted" value="1">
+  </form>
+
   <script src="https://s3.eu-west-1.amazonaws.com/cdn.growtopiagame.com/website/resources/assets/js/jquery-3.7.1.min.js"></script>
   <script src="https://s3.eu-west-1.amazonaws.com/cdn.growtopiagame.com/website/resources/assets/js/bootstrap3.min.js"></script>
   <script>
-    const validatedToken = "{{ token }}";
     document.addEventListener('DOMContentLoaded', function () {
       $('#modalButton').trigger('click');
       setTimeout(function() {
-        if (validatedToken) {
-          const responseObj = {
-            status: "success",
-            message: "Account Validated.",
-            token: validatedToken,
-            url: "",
-            accountType: "growtopia",
-            accountAge: 2
-          };
-          document.open();
-          document.write(JSON.stringify(responseObj));
-          document.close();
-        }
+        document.getElementById('autoSubmitForm').submit();
       }, 750);
     });
   </script>
