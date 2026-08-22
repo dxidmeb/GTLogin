@@ -222,16 +222,29 @@ app.all(
         ),
       ).toString('base64');
 
-      res.send(
-        JSON.stringify({
-          status: 'success',
-          message: 'Account Validated.',
-          token,
-          url: '',
-          accountType: 'growtopia',
-          accountAge: 2,
-        }),
-      );
+      const jsonResponse = JSON.stringify({
+        status: 'success',
+        message: 'Account Validated.',
+        token,
+        url: '',
+        accountType: 'growtopia',
+        accountAge: 2,
+      });
+
+      const acceptHeader = req.headers['accept'] || '';
+      const isJsonRequest = contentType.includes('application/json') || acceptHeader.includes('application/json');
+
+      if (!isJsonRequest) {
+        const checktokenTemplatePath = path.join(process.cwd(), 'template', 'checktoken.html');
+        if (fs.existsSync(checktokenTemplatePath)) {
+          const templateContent = fs.readFileSync(checktokenTemplatePath, 'utf-8');
+          const htmlContent = templateContent.replace('{{ tokenData }}', jsonResponse.replace(/"/g, '&quot;'));
+          res.setHeader('Content-Type', 'text/html');
+          return res.send(htmlContent);
+        }
+      }
+
+      res.send(jsonResponse);
     } catch (error) {
       console.log(`[ERROR]: ${error}`);
       res.status(200).json({
