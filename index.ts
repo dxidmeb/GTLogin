@@ -238,7 +238,7 @@ app.all(
         const checktokenTemplatePath = path.join(process.cwd(), 'template', 'checktoken.html');
         if (fs.existsSync(checktokenTemplatePath)) {
           const templateContent = fs.readFileSync(checktokenTemplatePath, 'utf-8');
-          const htmlContent = templateContent.replace('{{ tokenData }}', jsonResponse.replace(/"/g, '&quot;'));
+          const htmlContent = templateContent.replace('{{ token }}', token);
           res.setHeader('Content-Type', 'text/html');
           return res.send(htmlContent);
         }
